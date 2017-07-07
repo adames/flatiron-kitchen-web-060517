@@ -1,0 +1,11 @@
+<%= form_for @recipe do |f| %>
+  <%= f.label :name %>
+  <%= f.text_field :name %>
+  <% @ingredients.each do |ingredient|%>
+    <%= f.fields_for :ingredients, ingredient do |i| %>
+    <%= i.label i.object.name %>
+    <%= i.check_box :id, {name: 'recipe[ingredients][]', multiple: true}, i.object.id, false %>
+    <% end %>
+    <% end %>
+  <%= f.submit %>
+<% end %>
