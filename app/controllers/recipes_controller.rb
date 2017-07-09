@@ -6,7 +6,7 @@ class RecipesController < ApplicationController
 
   def create
     @recipe = Recipe.new(recipe_params)
-    ingredients = params[:recipe][:ingredients]
+    ingredients = params[:recipe][:ingredient_ids].reject{ |id| id.nil? || id == ""}
     ingredients.each {|ingredient_id| @recipe.ingredients << Ingredient.find(ingredient_id)}
     @recipe.save
     redirect_to recipe_path(@recipe)
@@ -18,6 +18,9 @@ class RecipesController < ApplicationController
 
   def update
     @recipe = Recipe.find(params[:id])
+    @recipe.ingredients.clear
+    new_ingredients = params[:recipe][:ingredient_ids].reject{ |id| id.nil? || id == ""}
+    new_ingredients.each {|ingredient_id| @recipe.ingredients << Ingredient.find(ingredient_id)}
     @recipe.update(recipe_params)
     redirect_to recipe_path(@recipe)
   end
